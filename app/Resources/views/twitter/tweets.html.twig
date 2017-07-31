@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for tweet in tweets %}
+
+        {{ include('twitter/tweet.html.twig', { 'tweet': tweet }) }}
+
+    {% endfor %}
+
+{% endblock %}
