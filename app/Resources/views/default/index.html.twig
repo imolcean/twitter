@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <div id="wrapper">
         <div id="container">
             <div id="welcome">
@@ -44,9 +45,11 @@
 
         </div>
     </div>
+
 {% endblock %}
 
 {% block stylesheets %}
+
     {{ parent() }}
 
 <style>
@@ -68,4 +71,5 @@
         .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
     }
 </style>
+
 {% endblock %}

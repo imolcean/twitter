@@ -5,6 +5,11 @@ body {
     margin: 0;
 }
 
+a {
+    color: #314a52;
+    text-decoration: none;
+}
+
 h1, h2 {
     line-height: 1.2;
     margin: 0 0 .5em;
@@ -58,4 +63,20 @@ article {
     padding: 1em;
     overflow: hidden;
     background-color: #FFFFFF;
+}
+
+div.tweet {
+    border: 1px solid gray;
+    margin-bottom: 15px;
+    padding: 5px;
+    background-color: #F5F5F5;
+}
+
+h2.tweet-title {
+    margin: 0px;
+}
+
+h3.tweet-author {
+    margin: 0px;
+    font-size: small;
 }
