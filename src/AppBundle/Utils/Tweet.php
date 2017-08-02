@@ -10,12 +10,14 @@ namespace AppBundle\Utils;
  */
 class Tweet
 {
+    public $id;
     public $title;
     public $author;
     public $body;
 
-    public function __construct(string $title, string $author, string $body)
+    public function __construct(int $id, string $title, string $author, string $body)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->author = $author;
         $this->body = $body;

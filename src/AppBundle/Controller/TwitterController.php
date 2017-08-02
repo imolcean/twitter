@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: imolcean
- * Date: 01.08.17
- * Time: 15:55
- */
 
 namespace AppBundle\Controller;
 
@@ -24,9 +18,9 @@ class TwitterController extends Controller
     {
         $res = array();
 
-        for($i = 0; $i < $num; $i++)
+        for($i = 1; $i < $num; $i++)
         {
-            $tweet = new Tweet('Tweet no.' . $i, 'anonymous', 'Lorem ipsum etc.');
+            $tweet = new Tweet($i, 'Tweet no.' . $i, 'anonymous', 'Lorem ipsum etc.');
 
             array_push($res, $tweet);
         }
@@ -42,5 +36,20 @@ class TwitterController extends Controller
     public function indexAction()
     {
         return $this->render("twitter/index.html.twig", ['tweets' => $this->getTweets(15)]);
+    }
+
+    /**
+     * @Route("/show/{id}", name="show", requirements={"id": "\d+"}, defaults={"id" = 0})
+     */
+    public function showAction(int $id)
+    {
+        $tweet = new Tweet($id, "Tweet no." . $id, "anonymous", "Lorem ipsum etc.");
+
+        if($id == 0)
+        {
+            return $this->redirectToRoute("index");
+        }
+
+        return $this->render("twitter/show.html.twig", ['tweet' => $tweet]);
     }
 }
