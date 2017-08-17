@@ -4,38 +4,24 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Utils\Tweet;
+use AppBundle\Entity\Tweet;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TwitterController extends Controller
 {
-    /**
-     * @param int $num
-     * @return array
-     *
-     * This is a temporary function. It will be removed.
-     */
-    private function getTweets(int $num) : array
-    {
-        $res = array();
-
-        for($i = 1; $i < $num; $i++)
-        {
-            $tweet = new Tweet($i, 'Tweet no.' . $i, 'anonymous', 'Lorem ipsum etc.');
-
-            array_push($res, $tweet);
-        }
-
-        shuffle($res);
-
-        return $res;
-    }
-
     /**
      * @Route("/", name="index")
      */
     public function indexAction()
     {
-        return $this->render("twitter/index.html.twig", ['tweets' => $this->getTweets(15)]);
+        $tweets = $this->getDoctrine()->getRepository(Tweet::class)->findAll();
+
+        if(!$tweets)
+        {
+            $tweets = array();
+        }
+
+        return $this->render("twitter/index.html.twig", ['tweets' => $tweets]);
     }
 
     /**
@@ -43,13 +29,42 @@ class TwitterController extends Controller
      */
     public function showAction(int $id)
     {
-        $tweet = new Tweet($id, "Tweet no." . $id, "anonymous", "Lorem ipsum etc.");
-
         if($id == 0)
         {
             return $this->redirectToRoute("index");
         }
 
+        $tweet = $this->getDoctrine()->getRepository(Tweet::class)->find($id);
+
+        if(!$tweet)
+        {
+            throw $this->createNotFoundException("Oops! Looks like there is no tweet no." . $id);
+        }
+
         return $this->render("twitter/show.html.twig", ['tweet' => $tweet]);
+    }
+
+    /**
+     * @Route("/remove/{id}", name="remove", requirements={"id": "\d+"}, defaults={"id" = 0})
+     */
+    public function removeAction(int $id)
+    {
+        if($id == 0)
+        {
+            return $this->redirectToRoute("index");
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $tweet = $em->getRepository(Tweet::class)->find($id);
+
+        if(!$tweet)
+        {
+            throw $this->createNotFoundException("Oops! Looks like there is no tweet no." . $id);
+        }
+
+        $em->remove($tweet);
+        $em->flush();
+
+        return $this->redirectToRoute("index");
     }
 }
