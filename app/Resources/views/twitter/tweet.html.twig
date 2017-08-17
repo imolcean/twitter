@@ -1,7 +1,7 @@
 <div class="tweet">
     <h2 class="tweet-title"><a href="{{ path('show', {'id': tweet.id}) }}">{{ tweet.title }}</a></h2>
 
-    <h3 class="tweet-author">by <a href="#">{{ tweet.author }}</a></h3>
+    <h3 class="tweet-author">by <a href="#">{{ tweet.author.name }}</a></h3>
 
     <p class="tweet-body">{{ tweet.body }}</p>
 </div>
