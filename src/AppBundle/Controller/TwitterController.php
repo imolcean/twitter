@@ -25,7 +25,40 @@ class TwitterController extends Controller
             $tweets = array();
         }
 
-        return $this->render("twitter/index.html.twig", ['tweets' => $tweets]);
+        return $this->render("twitter/list.html.twig", ['tweets' => $tweets]);
+    }
+
+    /**
+     * @Route("/list", name="list")
+     */
+    public function listAction()
+    {
+        return $this->redirectToRoute("index");
+    }
+
+    /**
+     * @Route("/list/{name}", name="listByAuthor", )
+     */
+    public function listByAuthor(string $name)
+    {
+        $author = $this
+            ->getDoctrine()
+            ->getRepository(User::class)
+            ->findOneBy(["name" => $name]);
+
+        if(!$author)
+        {
+            throw $this->createNotFoundException("Oops! Looks like there is no such user");
+        }
+
+        $tweets = $this->getDoctrine()->getRepository(Tweet::class)->findBy(['author' => $author]);
+
+        if(!$tweets)
+        {
+            $tweets = array();
+        }
+
+        return $this->render("twitter/list.html.twig", ['tweets' => $tweets]);
     }
 
     /**
