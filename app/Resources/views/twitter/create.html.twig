@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+
+        <div>
+            {{ form_errors(form.title) }}
+            {{ form_widget(form.title) }}
+        </div>
+
+        <div>
+            {{ form_errors(form.body) }}
+            {{ form_widget(form.body) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.save, {'label': 'Tweet!'}) }}
+        </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

@@ -2,10 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\EntityManagerInterface;
+
+use AppBundle\Form\TweetType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Tweet;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class TwitterController extends Controller
 {
@@ -14,7 +18,7 @@ class TwitterController extends Controller
      */
     public function indexAction()
     {
-        $tweets = $this->getDoctrine()->getRepository(Tweet::class)->findAll();
+        $tweets = $this->getDoctrine()->getRepository(Tweet::class)->findAllOrderedByIdDesc();
 
         if(!$tweets)
         {
@@ -66,5 +70,32 @@ class TwitterController extends Controller
         $em->flush();
 
         return $this->redirectToRoute("index");
+    }
+
+    /**
+     * @Route("/create", name="create")
+     */
+    public function createAction(Request $request)
+    {
+        $tweet = new Tweet();
+        $form = $this->createForm(TweetType::class, $tweet);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            // TODO Set the current user
+            $author = $em->getRepository(User::class)->findOneBy(['name' => 'Bob']);
+            $tweet->setAuthor($author);
+
+            $em->persist($tweet);
+            $em->flush();
+
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('twitter/create.html.twig', ['form' => $form->createView()]);
     }
 }

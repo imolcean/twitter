@@ -3,10 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
  * @ORM\Table(name="tweet")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TweetRepository")
  */
 class Tweet
 {
@@ -18,6 +19,8 @@ class Tweet
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(type="string", length=100)
      */
     private $title;
@@ -29,6 +32,8 @@ class Tweet
     private $author;
 
     /**
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(type="text")
      */
     private $body;
@@ -88,6 +93,4 @@ class Tweet
     {
         $this->body = $body;
     }
-
-
 }
